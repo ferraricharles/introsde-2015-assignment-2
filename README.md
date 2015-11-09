@@ -819,3 +819,4 @@ heroku open
 [14]: http://www.vogella.com/articles/JavaPersistenceAPI/article.html
 [15]: http://ww.mashape.com
 [16]: http://java.dzone.com/articles/nosql-jpa
+# lab07-local
