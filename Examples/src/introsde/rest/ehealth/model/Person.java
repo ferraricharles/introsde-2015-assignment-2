@@ -21,14 +21,15 @@ public class Person implements Serializable {
     @Id // defines this attributed as the one that identifies the entity
     @GeneratedValue(generator="sqlite_person")
     @TableGenerator(name="sqlite_person", table="sqlite_sequence",
-        pkColumnName="name", valueColumnName="seq",
+        pkColumnName="firstname", valueColumnName="seq",
         pkColumnValue="Person")
     @Column(name="idPerson")
     private int idPerson;
     @Column(name="lastname")
     private String lastname;
-    @Column(name="name")
-    private String name;
+
+    @Column(name="firstname")
+    private String firstname;
     @Column(name="username")
     private String username;
     @Temporal(TemporalType.DATE) // defines the precision of the date attribute
@@ -41,7 +42,7 @@ public class Person implements Serializable {
     @OneToMany(mappedBy="person",cascade=CascadeType.ALL,fetch=FetchType.EAGER)
     private List<LifeStatus> lifeStatus;
     
-    @XmlElementWrapper(name = "Measurements")
+    @XmlElementWrapper(name = "HealthProfile")
     public List<LifeStatus> getLifeStatus() {
         return lifeStatus;
     }
@@ -56,7 +57,7 @@ public class Person implements Serializable {
         return lastname;
     }
     public String getName(){
-        return name;
+        return firstname;
     }
     public String getUsername(){
         return username;
@@ -76,7 +77,7 @@ public class Person implements Serializable {
         this.lastname = lastname;
     }
     public void setName(String name){
-        this.name = name;
+        this.firstname = name;
     }
     public void setUsername(String username){
         this.username = username;

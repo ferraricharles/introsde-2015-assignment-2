@@ -78,6 +78,7 @@ public class PersonCollectionResource {
     // 1 will be treaded as parameter todo and passed to PersonResource
     @Path("{personId}")
     public PersonResource getPerson(@PathParam("personId") int id) {
-        return new PersonResource(uriInfo, request, id);
+        return  new PersonResource(uriInfo, request, id);
     }
+
 }

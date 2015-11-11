@@ -9,6 +9,8 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -98,5 +100,10 @@ public class PersonResource {
         Person person = Person.getPersonById(personId);
         System.out.println("Person: "+person.toString());
         return person;
+    }
+
+    @Path("{measureDefinition}")
+    public PersonResource getPerson(@PathParam("measureDefinition") String md) {
+        return  new PersonResource(uriInfo, request, 2);
     }
 }

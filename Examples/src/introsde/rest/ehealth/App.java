@@ -23,6 +23,7 @@ public class App
         {
             hostname = "localhost";
         }
+        
 
         URI BASE_URI = new URI(protocol + hostname + port+"sdelab/");
 
