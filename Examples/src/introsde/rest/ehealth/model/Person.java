@@ -140,7 +140,7 @@ public class Person implements Serializable {
             System.out.println("Error"+e);
             
         }
-        System.out.println("\n\n\n\n\n\n PEDAAAAANA Measurements found"+list.size());
+        //System.out.println("\n\n\n\n\n\n PEDAAAAANA Measurements found"+list.size());
         LifeCoachDao.instance.closeConnections(em);
         return list;
         

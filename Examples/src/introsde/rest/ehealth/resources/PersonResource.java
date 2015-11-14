@@ -1,5 +1,5 @@
 package introsde.rest.ehealth.resources;
-import introsde.rest.ehealth.resources.PersonMeasureResource;
+import introsde.rest.ehealth.resources.PersonMeasureCollectionResource;
 
 import introsde.rest.ehealth.model.Person;
 
@@ -105,7 +105,7 @@ public class PersonResource {
     }
 
     @Path("{measureDefinition}")
-    public PersonMeasureResource getPerson(@PathParam("measureDefinition") String md) {
-        return  new PersonMeasureResource(uriInfo, request, id, md);
+    public PersonMeasureCollectionResource getPerson(@PathParam("measureDefinition") String md) {
+        return  new PersonMeasureCollectionResource(uriInfo, request, id, md);
     }
 }

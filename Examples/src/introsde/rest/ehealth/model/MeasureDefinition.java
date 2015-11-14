@@ -8,6 +8,8 @@ import java.util.List;
 
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.XmlElement;
 
 
 /**
@@ -40,7 +42,7 @@ public class MeasureDefinition implements Serializable {
 
 	public MeasureDefinition() {
 	}
-
+    @XmlTransient
 	public int getIdMeasureDef() {
 		return this.idMeasureDef;
 	}
@@ -57,6 +59,7 @@ public class MeasureDefinition implements Serializable {
 		this.measureName = measureName;
 	}
 
+	@XmlTransient
 	public String getMeasureType() {
 		return this.measureType;
 	}
@@ -65,6 +68,7 @@ public class MeasureDefinition implements Serializable {
 		this.measureType = measureType;
 	}
 
+	@XmlTransient
 	public List<MeasureDefaultRange> getMeasureDefaultRange() {
 	    return measureDefaultRange;
 	}

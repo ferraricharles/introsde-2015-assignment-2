@@ -27,7 +27,7 @@ import javax.ws.rs.core.UriInfo;
 
 @Stateless // will work only inside a Java EE application
 @LocalBean // will work only inside a Java EE application
-public class PersonMeasureResource {
+public class PersonMeasureCollectionResource {
 
     // Allows to insert contextual objects into the class,
     // e.g. ServletContext, Request, Response, UriInfo
@@ -36,7 +36,8 @@ public class PersonMeasureResource {
     @Context
     Request request;
     int id;
-    int mid;
+
+    String measureDescription;
 
     // will work only inside a Java EE application
     @PersistenceUnit(unitName="introsde-jpa")
@@ -47,37 +48,60 @@ public class PersonMeasureResource {
     private EntityManagerFactory entityManagerFactory;
 
 
-     public PersonMeasureResource(UriInfo uriInfo, Request request,int id, EntityManager em) {
+     public PersonMeasureCollectionResource(UriInfo uriInfo, Request request,int id, EntityManager em) {
         this.uriInfo = uriInfo;
         this.request = request;
         this.id = id;
         this.entityManager = em;
     }
 
-    public PersonMeasureResource(UriInfo uriInfo, Request request,int id, int mid) {
+    public PersonMeasureCollectionResource(UriInfo uriInfo, Request request,int id, String measureDescription) {
         this.uriInfo = uriInfo;
         this.request = request;
         this.id = id;
-        this.mid = mid;
+        this.measureDescription = measureDescription;
     }
 
     // Return the list of people to the user in the browser
     @GET
-    @Produces(MediaType.TEXT_XML)
-    public LifeStatus getPersonSingleLifeStatus() {        
-        System.out.println("Getting measure"+mid+" for Person... "+id);
+    @Produces({MediaType.TEXT_XML,  MediaType.APPLICATION_JSON ,  MediaType.APPLICATION_XML })
+    public List<LifeStatus> getPersonHealthMeasureHistory() {        
+        System.out.println("Getting list of Measures from Person... "+id);
 
-        LifeStatus ls = LifeStatus.getLifeStatusById(mid);
+        MeasureDefinition md = MeasureDefinition.getMeasureDefinitionByTitle(measureDescription);
         //System.out.println("CHARLES LINDO\n\n\n\n\n "+md.getMeasureName()+" \n\n\n\n\n ");
-        
-
+        List<LifeStatus> ls = Person.getLifeStatusHistory(id, md.getIdMeasureDef());
         return ls;
     }
 
 
 
-    
+    // retuns the number of people
+    // to get the total number of records
+    @GET
+    @Path("count")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String getCount() {
+        System.out.println("Getting count...");
+        List<Person> people = Person.getAll();
+        int count = people.size();
+        return String.valueOf(count);
+    }
 
-    
+    public Person getPersonById(int personId) {
+        System.out.println("Reading person from DB with id: "+personId);
+
+        // this will work within a Java EE container, where not DAO will be needed
+        //Person person = entityManager.find(Person.class, personId); 
+
+        Person person = Person.getPersonById(personId);
+        System.out.println("Person: "+person.toString());
+        return person;
+    }
+
+    @Path("{mid}")
+    public PersonMeasureResource getPerson(@PathParam("mid") int mid) {
+        return  new PersonMeasureResource(uriInfo, request, id, mid);
+    }
 
 }

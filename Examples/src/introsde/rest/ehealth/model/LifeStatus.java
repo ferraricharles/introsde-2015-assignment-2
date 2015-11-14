@@ -19,6 +19,8 @@ import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlElement;
 import javax.persistence.OneToOne;
 
 /**
@@ -51,9 +53,18 @@ public class LifeStatus implements Serializable {
 	@JoinColumn(name="idPerson",referencedColumnName="idPerson")
 	private Person person;
 
+	@XmlElement(name = "MeasureType")
+	public String getMeasureTypeDescription(){
+		MeasureDefinition md = this.getMeasureDefinition();
+		//System.out.println("Alo Blumenau bom dia Brasil");
+		return md.getMeasureName();
+		//return "passa na mayonese";
+	}
+
 	public LifeStatus() {
 	}
 
+	@XmlElement(name = "mid")
 	public int getIdMeasure() {
 		return this.idMeasure;
 	}
@@ -70,6 +81,8 @@ public class LifeStatus implements Serializable {
 		this.value = value;
 	}
 
+
+    @XmlTransient
 	public MeasureDefinition getMeasureDefinition() {
 		return measureDefinition;
 	}
