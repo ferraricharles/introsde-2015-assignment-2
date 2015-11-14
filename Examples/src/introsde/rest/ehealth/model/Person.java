@@ -1,10 +1,12 @@
 package introsde.rest.ehealth.model;
 
 import introsde.rest.ehealth.dao.LifeCoachDao;
+import introsde.rest.ehealth.model.HealthMeasureHistory;
 
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.ArrayList;
 
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -42,12 +44,14 @@ public class Person implements Serializable {
     @OneToMany(mappedBy="person",cascade=CascadeType.ALL,fetch=FetchType.EAGER)
     private List<LifeStatus> lifeStatus;
     
-    @XmlElementWrapper(name = "HealthProfile")
+    @XmlElementWrapper(name = "lifeStatus")
     public List<LifeStatus> getLifeStatus() {
         return lifeStatus;
     }
     // add below all the getters and setters of all the private attributes
     
+
+
     // getters
     public int getIdPerson(){
         return idPerson;
@@ -87,6 +91,59 @@ public class Person implements Serializable {
     }
     public void setEmail(String email){
         this.email = email;
+    }
+
+    /* CHARLES LINDO*/
+    public static List<LifeStatus> getLifeStatusHistory(int personid) {
+        EntityManager em = LifeCoachDao.instance.createEntityManager();
+        System.out.println("Looking measurements for"+personid);
+        List<LifeStatus> list = new ArrayList<LifeStatus>();
+        try{
+             list = em.createQuery(        
+            "SELECT lf FROM LifeStatus lf WHERE hm.person.idPerson = :pID")
+            .setParameter("pID", personid)
+            .getResultList();
+            
+
+        }catch(Exception e){
+            System.out.println("Error"+e);
+            
+        }
+        System.out.println("Measurements found"+list.size());
+        LifeCoachDao.instance.closeConnections(em);
+        return list;
+        
+    }
+
+
+    public static List<LifeStatus> getLifeStatusHistory(int personid, int measureid) {
+        EntityManager em = LifeCoachDao.instance.createEntityManager();
+        System.out.println("\n\n\n\n\n\nLooking measurement "+measureid+" for "+personid);
+        List<LifeStatus> list = new ArrayList<LifeStatus>();
+        
+
+        try{
+             list = em.createQuery(        
+            "SELECT lf FROM LifeStatus lf WHERE lf.person.idPerson = :pID AND lf.measureDefinition.idMeasureDef = :mID")
+            .setParameter("pID", personid)
+            .setParameter("mID", measureid)
+            .getResultList();
+
+            /*    
+            list = em.createQuery(        
+            "SELECT lf FROM LifeStatus lf WHERE lf.measureDefinition.idMeasureDef = :mID")
+            .setParameter("mID", measureid)
+            .getResultList();
+            */
+
+        }catch(Exception e){
+            System.out.println("Error"+e);
+            
+        }
+        System.out.println("\n\n\n\n\n\n PEDAAAAANA Measurements found"+list.size());
+        LifeCoachDao.instance.closeConnections(em);
+        return list;
+        
     }
     
     public static Person getPersonById(int personId) {

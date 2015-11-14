@@ -1,4 +1,5 @@
 package introsde.rest.ehealth.resources;
+import introsde.rest.ehealth.resources.PersonMeasureResource;
 
 import introsde.rest.ehealth.model.Person;
 
@@ -56,6 +57,7 @@ public class PersonResource {
     @GET
     @Produces(MediaType.TEXT_XML)
     public Person getPersonHTML() {
+        System.out.println("Returning person... " );
         Person person = this.getPersonById(id);
         if (person == null)
             throw new RuntimeException("Get: Person with " + id + " not found");
@@ -103,7 +105,7 @@ public class PersonResource {
     }
 
     @Path("{measureDefinition}")
-    public PersonResource getPerson(@PathParam("measureDefinition") String md) {
-        return  new PersonResource(uriInfo, request, 2);
+    public PersonMeasureResource getPerson(@PathParam("measureDefinition") String md) {
+        return  new PersonMeasureResource(uriInfo, request, id, md);
     }
 }

@@ -16,6 +16,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.TableGenerator;
@@ -30,7 +31,9 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @Entity
 @Table(name="HealthMeasureHistory")
-@NamedQuery(name="HealthMeasureHistory.findAll", query="SELECT h FROM HealthMeasureHistory h")
+@NamedQueries({
+	@NamedQuery(name="HealthMeasureHistory.findAll", query="SELECT h FROM HealthMeasureHistory h")
+})
 @XmlRootElement
 public class HealthMeasureHistory implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -117,6 +120,7 @@ public class HealthMeasureHistory implements Serializable {
 	    LifeCoachDao.instance.closeConnections(em);
 	    return list;
 	}
+	
 	
 	public static HealthMeasureHistory saveHealthMeasureHistory(HealthMeasureHistory p) {
 		EntityManager em = LifeCoachDao.instance.createEntityManager();

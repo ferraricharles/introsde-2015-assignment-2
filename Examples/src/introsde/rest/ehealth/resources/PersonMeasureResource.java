@@ -1,6 +1,8 @@
 package introsde.rest.ehealth.resources;
-import introsde.rest.ehealth.model.HealthMeasureHistory;
 import introsde.rest.ehealth.model.Person;
+import introsde.rest.ehealth.model.LifeStatus;
+import introsde.rest.ehealth.model.MeasureDefinition;
+
 
 import java.io.IOException;
 import java.util.List;
@@ -25,8 +27,7 @@ import javax.ws.rs.core.UriInfo;
 
 @Stateless // will work only inside a Java EE application
 @LocalBean // will work only inside a Java EE application
-@Path("/measureold")
-public class MeasureCollectionResource {
+public class PersonMeasureResource {
 
     // Allows to insert contextual objects into the class,
     // e.g. ServletContext, Request, Response, UriInfo
@@ -34,6 +35,9 @@ public class MeasureCollectionResource {
     UriInfo uriInfo;
     @Context
     Request request;
+    int id;
+
+    String measureDescription;
 
     // will work only inside a Java EE application
     @PersistenceUnit(unitName="introsde-jpa")
@@ -43,14 +47,34 @@ public class MeasureCollectionResource {
     @PersistenceContext(unitName = "introsde-jpa",type=PersistenceContextType.TRANSACTION)
     private EntityManagerFactory entityManagerFactory;
 
+
+     public PersonMeasureResource(UriInfo uriInfo, Request request,int id, EntityManager em) {
+        this.uriInfo = uriInfo;
+        this.request = request;
+        this.id = id;
+        this.entityManager = em;
+    }
+
+    public PersonMeasureResource(UriInfo uriInfo, Request request,int id, String measureDescription) {
+        this.uriInfo = uriInfo;
+        this.request = request;
+        this.id = id;
+        this.measureDescription = measureDescription;
+    }
+
     // Return the list of people to the user in the browser
     @GET
     @Produces({MediaType.TEXT_XML,  MediaType.APPLICATION_JSON ,  MediaType.APPLICATION_XML })
-    public List<HealthMeasureHistory> getPersonsBrowser() {
-        System.out.println("Getting list of measures...");
-        List<HealthMeasureHistory> mh = HealthMeasureHistory.getAll();
-        return mh;
+    public List<LifeStatus> getPersonHealthMeasureHistory() {        
+        System.out.println("Getting list of Measures from Person... "+id);
+
+        MeasureDefinition md = MeasureDefinition.getMeasureDefinitionByTitle(measureDescription);
+        //System.out.println("CHARLES LINDO\n\n\n\n\n "+md.getMeasureName()+" \n\n\n\n\n ");
+        List<LifeStatus> ls = Person.getLifeStatusHistory(id, md.getIdMeasureDef());
+        return ls;
     }
+
+
 
     // retuns the number of people
     // to get the total number of records
@@ -64,21 +88,17 @@ public class MeasureCollectionResource {
         return String.valueOf(count);
     }
 
-    @POST
-    @Produces({MediaType.APPLICATION_JSON ,  MediaType.APPLICATION_XML})
-    @Consumes({MediaType.APPLICATION_JSON ,  MediaType.APPLICATION_XML})
-    public Person newPerson(Person person) throws IOException {
-        System.out.println("Creating new person...123");            
-        return Person.savePerson(person);
+    public Person getPersonById(int personId) {
+        System.out.println("Reading person from DB with id: "+personId);
+
+        // this will work within a Java EE container, where not DAO will be needed
+        //Person person = entityManager.find(Person.class, personId); 
+
+        Person person = Person.getPersonById(personId);
+        System.out.println("Person: "+person.toString());
+        return person;
     }
+
     
 
-    // Defines that the next path parameter after the base url is
-    // treated as a parameter and passed to the PersonResources
-    // Allows to type http://localhost:599/base_url/1
-    // 1 will be treaded as parameter todo and passed to PersonResource
-    @Path("{measureId}")
-    public MeasureResource getPerson(@PathParam("measureId") int id) {
-        return new MeasureResource(uriInfo, request, id);
-    }
 }

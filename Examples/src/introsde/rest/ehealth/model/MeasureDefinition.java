@@ -73,6 +73,26 @@ public class MeasureDefinition implements Serializable {
 	    this.measureDefaultRange = param;
 	}
 
+	public static MeasureDefinition getMeasureDefinitionByTitle(String mdDesc){
+		EntityManager em = LifeCoachDao.instance.createEntityManager();
+		System.out.println("LOOKING FOR  "+mdDesc);
+		MeasureDefinition md = new MeasureDefinition();
+		try{
+             md = (MeasureDefinition) em.createQuery(        
+            "SELECT md FROM MeasureDefinition md WHERE md.measureName = :measurenm ")
+            .setParameter("measurenm", mdDesc)
+            .getSingleResult();        
+
+        }catch(Exception e){
+            System.out.println("Error"+e);
+            
+        }
+        System.out.println("Measurement "+mdDesc+" found");
+        LifeCoachDao.instance.closeConnections(em);
+        return md;
+
+	}
+
 	// database operations
 	public static MeasureDefinition getMeasureDefinitionById(int personId) {
 		EntityManager em = LifeCoachDao.instance.createEntityManager();
