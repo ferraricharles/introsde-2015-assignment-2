@@ -2,6 +2,7 @@ package introsde.rest.ehealth.model;
 
 import introsde.rest.ehealth.dao.LifeCoachDao;
 import introsde.rest.ehealth.model.HealthMeasureHistory;
+import introsde.rest.ehealth.model.MeasureDefinition;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -14,6 +15,8 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+
 @Entity  // indicates that this class is an entity to persist in DB
 @Table(name="Person") // to whole table must be persisted 
 @NamedQuery(name="Person.findAll", query="SELECT p FROM Person p")
@@ -23,14 +26,14 @@ public class Person implements Serializable {
     @Id // defines this attributed as the one that identifies the entity
     @GeneratedValue(generator="sqlite_person")
     @TableGenerator(name="sqlite_person", table="sqlite_sequence",
-        pkColumnName="firstname", valueColumnName="seq",
+        pkColumnName="name", valueColumnName="seq",
         pkColumnValue="Person")
     @Column(name="idPerson")
     private int idPerson;
     @Column(name="lastname")
     private String lastname;
 
-    @Column(name="firstname")
+    @Column(name="name")
     private String firstname;
     @Column(name="username")
     private String username;
@@ -44,10 +47,7 @@ public class Person implements Serializable {
     @OneToMany(mappedBy="person",cascade=CascadeType.ALL,fetch=FetchType.EAGER)
     private List<LifeStatus> lifeStatus;
     
-    @XmlElementWrapper(name = "lifeStatus")
-    public List<LifeStatus> getLifeStatus() {
-        return lifeStatus;
-    }
+    
     // add below all the getters and setters of all the private attributes
     
 
@@ -60,17 +60,31 @@ public class Person implements Serializable {
     public String getLastname(){
         return lastname;
     }
+    @XmlElement(name = "firstname")
     public String getName(){
         return firstname;
     }
+    @XmlTransient
     public String getUsername(){
         return username;
     }
     public Date getBirthdate(){
         return birthdate;
     }
+    @XmlTransient
     public String getEmail(){
         return email;
+    }
+
+    @XmlElementWrapper(name = "healthProfile")
+    public List<LifeStatus> getLifeStatus() {
+        return lifeStatus;
+    }
+
+
+    public void setLifeStatus (List<LifeStatus> lifeStatus){
+        System.out.println("\n\n\n\n\n\n\n HERE WE ARE");
+        this.lifeStatus = lifeStatus;
     }
     
     // setters
@@ -115,6 +129,13 @@ public class Person implements Serializable {
         
     }
 
+    public void addPersonToLifeStatus(){
+        //System.out.println("\n\n\n\n\n\n\n\n ADDING PERSON FROM LOOP" + lifeStatus.size());
+        for(int i=0; i<lifeStatus.size(); i++){
+            //System.out.println("\n\n\n\n\n\n\n\n ADDING PERSON FROM LOOP");
+            lifeStatus.get(i).setPerson(this);
+        }
+    }
 
     public static List<LifeStatus> getLifeStatusHistory(int personid, int measureid) {
         EntityManager em = LifeCoachDao.instance.createEntityManager();
@@ -161,7 +182,10 @@ public class Person implements Serializable {
         return list;
     }
 
+    
+
     public static Person savePerson(Person p) {
+        p.addPersonToLifeStatus();
         EntityManager em = LifeCoachDao.instance.createEntityManager();
         EntityTransaction tx = em.getTransaction();
         tx.begin();
@@ -171,9 +195,18 @@ public class Person implements Serializable {
         return p;
     } 
 
-    public static Person updatePerson(Person p) {
+    public static Person updatePerson(Person newPerson) {
         EntityManager em = LifeCoachDao.instance.createEntityManager(); 
         EntityTransaction tx = em.getTransaction();
+        Person p = getPersonById(newPerson.getIdPerson());
+        if(newPerson.getName()!=null)
+            p.setName(newPerson.getName());
+
+        if(newPerson.getBirthdate() != null)
+            p.setBirthdate(newPerson.getBirthdate());
+
+        if(newPerson.getLastname() != null)
+            p.setLastname(newPerson.getLastname());
         tx.begin();
         p=em.merge(p);
         tx.commit();
@@ -182,11 +215,17 @@ public class Person implements Serializable {
     }
 
     public static void removePerson(Person p) {
+        //System.out.println("\n\n\n\n\n Trying to DELETE");
         EntityManager em = LifeCoachDao.instance.createEntityManager();
         EntityTransaction tx = em.getTransaction();
         tx.begin();
         p=em.merge(p);
-        em.remove(p);
+        try{
+            em.remove(p);    
+        }catch(Error e){
+            System.out.println(e);
+        }
+        
         tx.commit();
         LifeCoachDao.instance.closeConnections(em);
     }

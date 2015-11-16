@@ -70,7 +70,7 @@ public class PersonResource {
     public Response putPerson(Person person) {
         System.out.println("--> Updating Person... " +this.id);
         System.out.println("--> "+person.toString());
-        Person.updatePerson(person);
+        //Person.updatePerson(person);
         Response res;
         Person existing = getPersonById(this.id);
 
