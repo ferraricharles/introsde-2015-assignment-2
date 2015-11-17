@@ -1,6 +1,7 @@
 package introsde.rest.ehealth.resources;
 import introsde.rest.ehealth.model.HealthMeasureHistory;
 import introsde.rest.ehealth.model.Person;
+import introsde.rest.ehealth.model.LifeStatus;
 
 import java.io.IOException;
 import java.util.List;
@@ -64,13 +65,7 @@ public class MeasureCollectionResource {
         return String.valueOf(count);
     }
 
-    @POST
-    @Produces({MediaType.APPLICATION_JSON ,  MediaType.APPLICATION_XML})
-    @Consumes({MediaType.APPLICATION_JSON ,  MediaType.APPLICATION_XML})
-    public Person newPerson(Person person) throws IOException {
-        System.out.println("Creating new person...123");            
-        return Person.savePerson(person);
-    }
+    
     
 
     // Defines that the next path parameter after the base url is

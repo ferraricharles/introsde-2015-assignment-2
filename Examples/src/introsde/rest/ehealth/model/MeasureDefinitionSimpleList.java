@@ -16,8 +16,7 @@ import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlElement;
 
 @XmlRootElement (name="measureTypes")
- public class MeasureDefinitionSimpleList {
-     
+ public class MeasureDefinitionSimpleList {     
 
      @XmlElement
      List<String> measureType = new ArrayList<String>();

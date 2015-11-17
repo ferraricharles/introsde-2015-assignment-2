@@ -62,6 +62,7 @@ public class PersonResource {
         if (person == null)
             throw new RuntimeException("Get: Person with " + id + " not found");
         System.out.println("Returning person... " + person.getIdPerson());
+        person.setRecentLifeStatus(true);
         return person;
     }
 

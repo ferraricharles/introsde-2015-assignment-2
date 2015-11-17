@@ -42,6 +42,8 @@ public class Person implements Serializable {
     private Date birthdate; 
     @Column(name="email")
     private String email;
+    @Transient
+    private boolean recentLifeStatus = false;
     
     // mappedBy must be equal to the name of the attribute in LifeStatus that maps this relation
     @OneToMany(mappedBy="person",cascade=CascadeType.ALL,fetch=FetchType.EAGER)
@@ -50,7 +52,14 @@ public class Person implements Serializable {
     
     // add below all the getters and setters of all the private attributes
     
+    public void setRecentLifeStatus(boolean b){
+        recentLifeStatus = b;
+    }
 
+
+    public boolean getRecentLifeStatus(){
+        return this.recentLifeStatus;
+    }
 
     // getters
     public int getIdPerson(){
@@ -78,8 +87,22 @@ public class Person implements Serializable {
 
     @XmlElementWrapper(name = "healthProfile")
     public List<LifeStatus> getLifeStatus() {
-        return lifeStatus;
+        return getRecentLifeStatus(this.getIdPerson());
+
+        /*
+            if(!recentLifeStatus){
+                setRecentLifeStatus(false);
+                
+
+            }
+                
+
+            return lifeStatus;
+            */
+
     }
+
+
 
 
     public void setLifeStatus (List<LifeStatus> lifeStatus){
@@ -115,6 +138,27 @@ public class Person implements Serializable {
         try{
              list = em.createQuery(        
             "SELECT lf FROM LifeStatus lf WHERE hm.person.idPerson = :pID")
+            .setParameter("pID", personid)
+            .getResultList();
+            
+
+        }catch(Exception e){
+            System.out.println("Error"+e);
+            
+        }
+        System.out.println("Measurements found"+list.size());
+        LifeCoachDao.instance.closeConnections(em);
+        return list;
+        
+    }
+
+    public static List<LifeStatus> getRecentLifeStatus(int personid) {
+        EntityManager em = LifeCoachDao.instance.createEntityManager();
+        System.out.println("Looking measurements for"+personid);
+        List<LifeStatus> list = new ArrayList<LifeStatus>();
+        try{
+             list = em.createQuery(        
+            "SELECT lf FROM LifeStatus lf WHERE lf.person.idPerson = :pID GROUP BY (lf.measureDefinition)")
             .setParameter("pID", personid)
             .getResultList();
             

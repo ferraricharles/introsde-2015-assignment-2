@@ -66,13 +66,27 @@ public class PersonMeasureCollectionResource {
     @GET
     @Produces({MediaType.TEXT_XML,  MediaType.APPLICATION_JSON ,  MediaType.APPLICATION_XML })
     public List<LifeStatus> getPersonHealthMeasureHistory() {        
-        System.out.println("Getting list of Measures from Person... "+id);
+        System.out.println("Getting list of Measures for Person... "+id);
 
         MeasureDefinition md = MeasureDefinition.getMeasureDefinitionByTitle(measureDescription);
         //System.out.println("CHARLES LINDO\n\n\n\n\n "+md.getMeasureName()+" \n\n\n\n\n ");
         List<LifeStatus> ls = Person.getLifeStatusHistory(id, md.getIdMeasureDef());
         return ls;
     }
+
+    @POST
+    @Produces({MediaType.APPLICATION_JSON ,  MediaType.APPLICATION_XML})
+    @Consumes({MediaType.APPLICATION_JSON ,  MediaType.APPLICATION_XML})
+    public LifeStatus newLifeStatus(LifeStatus ls) throws IOException {
+        System.out.println("Creating new Life Status Here we go... Value "+ls.getValue());  
+        MeasureDefinition md = MeasureDefinition.getMeasureDefinitionByTitle(measureDescription);
+        Person p = Person.getPersonById(id);
+        ls.setMeasureDefinition(md);
+
+        ls.setPerson(p);
+        return LifeStatus.saveLifeStatus(ls);
+    }
+
 
 
 
@@ -99,6 +113,7 @@ public class PersonMeasureCollectionResource {
         return person;
     }
 
+    
     @Path("{mid}")
     public PersonMeasureResource getPerson(@PathParam("mid") int mid) {
         return  new PersonMeasureResource(uriInfo, request, id, mid);

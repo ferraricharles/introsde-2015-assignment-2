@@ -5,6 +5,12 @@ import introsde.rest.ehealth.model.MeasureDefinition;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Date;
+import java.util.Calendar;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+
+
 
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -36,6 +42,9 @@ public class LifeStatus implements Serializable {
 
 	@Column(name = "value")
 	private String value;
+
+	@Column(name = "createdDate")
+	private String createdDate;
 	
 	@OneToOne
 	@JoinColumn(name = "idMeasureDef", referencedColumnName = "idMeasureDef", insertable = true, updatable = true)
@@ -47,18 +56,27 @@ public class LifeStatus implements Serializable {
 
 	@XmlElement(name = "MeasureType")
 	public String getMeasureTypeDescription(){
-		MeasureDefinition md = this.getMeasureDefinition();
-		//System.out.println("Alo Blumenau bom dia Brasil");
+		MeasureDefinition md = this.getMeasureDefinition();		
 		return md.getMeasureName();
-		//return "passa na mayonese";
+		
 	}
 
 	public void setMeasureTypeDescription(String param){
+		System.out.println("\n\n\n\n\n\n "+param);
 		this.setMeasureDefinition (MeasureDefinition.getMeasureDefinitionByTitle(param));
 		
 	}
 
 	public LifeStatus() {
+
+	}
+
+	public void setCreatedDate(String createdDate){
+		this.createdDate = createdDate;
+	}
+
+	public String getCreatedDate(){
+		return createdDate;
 	}
 
 	@XmlElement(name = "mid")
@@ -117,6 +135,20 @@ public class LifeStatus implements Serializable {
 	}
 	
 	public static LifeStatus saveLifeStatus(LifeStatus p) {
+
+		//System.out.println("\n\n\n\n\n\n\n AQUI BITCH");
+		DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
+		//System.out.println("\n\n\n\n\n\n\n AQUI BITCH2");
+		Date today = Calendar.getInstance().getTime(); 
+		System.out.println("\n\n\n\n\n\n\n AQUI BITCH3" + today);
+		String reportDate = df.format(today);
+		System.out.println("\n\n\n\n\n\n\n AQUI BITCH4" + reportDate);
+		
+		p.setCreatedDate(reportDate);
+
+		
+		System.out.println("\n\n\n\n\n\n\n AQUI BITCH"+reportDate);
+
 		EntityManager em = LifeCoachDao.instance.createEntityManager();
 		EntityTransaction tx = em.getTransaction();
 		tx.begin();
