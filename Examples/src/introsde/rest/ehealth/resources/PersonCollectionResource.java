@@ -48,6 +48,8 @@ public class PersonCollectionResource {
     public List<Person> getPersonsBrowser() {
         System.out.println("Getting list of people...");
         List<Person> people = Person.getAll();
+
+        
         return people;
     }
 

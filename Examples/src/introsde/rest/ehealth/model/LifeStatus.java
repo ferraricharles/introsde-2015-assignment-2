@@ -140,14 +140,14 @@ public class LifeStatus implements Serializable {
 		DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
 		//System.out.println("\n\n\n\n\n\n\n AQUI BITCH2");
 		Date today = Calendar.getInstance().getTime(); 
-		System.out.println("\n\n\n\n\n\n\n AQUI BITCH3" + today);
+		
 		String reportDate = df.format(today);
-		System.out.println("\n\n\n\n\n\n\n AQUI BITCH4" + reportDate);
+		
 		
 		p.setCreatedDate(reportDate);
 
 		
-		System.out.println("\n\n\n\n\n\n\n AQUI BITCH"+reportDate);
+		
 
 		EntityManager em = LifeCoachDao.instance.createEntityManager();
 		EntityTransaction tx = em.getTransaction();

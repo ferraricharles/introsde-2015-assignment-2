@@ -63,7 +63,7 @@ public class PersonMeasureResource {
 
     // Return the list of people to the user in the browser
     @GET
-    @Produces(MediaType.TEXT_XML)
+    @Produces({MediaType.TEXT_XML,  MediaType.APPLICATION_JSON ,  MediaType.APPLICATION_XML })
     public LifeStatus getPersonSingleLifeStatus() {        
         System.out.println("Getting measure"+mid+" for Person... "+id);
 

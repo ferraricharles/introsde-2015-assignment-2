@@ -9,6 +9,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.ArrayList;
 
+import java.util.Calendar;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -16,6 +20,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.XmlElementRef;
 
 @Entity  // indicates that this class is an entity to persist in DB
 @Table(name="Person") // to whole table must be persisted 
@@ -42,24 +47,16 @@ public class Person implements Serializable {
     private Date birthdate; 
     @Column(name="email")
     private String email;
-    @Transient
-    private boolean recentLifeStatus = false;
+    
     
     // mappedBy must be equal to the name of the attribute in LifeStatus that maps this relation
+    
     @OneToMany(mappedBy="person",cascade=CascadeType.ALL,fetch=FetchType.EAGER)
     private List<LifeStatus> lifeStatus;
     
     
     // add below all the getters and setters of all the private attributes
-    
-    public void setRecentLifeStatus(boolean b){
-        recentLifeStatus = b;
-    }
-
-
-    public boolean getRecentLifeStatus(){
-        return this.recentLifeStatus;
-    }
+   
 
     // getters
     public int getIdPerson(){
@@ -85,6 +82,8 @@ public class Person implements Serializable {
         return email;
     }
 
+
+
     @XmlElementWrapper(name = "healthProfile")
     public List<LifeStatus> getLifeStatus() {
         return getRecentLifeStatus(this.getIdPerson());
@@ -109,6 +108,8 @@ public class Person implements Serializable {
         System.out.println("\n\n\n\n\n\n\n HERE WE ARE");
         this.lifeStatus = lifeStatus;
     }
+
+
     
     // setters
     public void setIdPerson(int idPerson){
@@ -174,9 +175,19 @@ public class Person implements Serializable {
     }
 
     public void addPersonToLifeStatus(){
-        //System.out.println("\n\n\n\n\n\n\n\n ADDING PERSON FROM LOOP" + lifeStatus.size());
+        //System.out.println("\n\n\n\n\n\n\n\n ÄHHhhhhhhhhhhhhhhhh");
+        System.out.println("\n\n\n\n\n\n\n\n ADDING PERSON FROM LOOP" + lifeStatus.size());
         for(int i=0; i<lifeStatus.size(); i++){
-            //System.out.println("\n\n\n\n\n\n\n\n ADDING PERSON FROM LOOP");
+
+            DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
+            //System.out.println("\n\n\n\n\n\n\n AQUI BITCH2");
+            Date today = Calendar.getInstance().getTime(); 
+            
+            String reportDate = df.format(today);
+            
+            
+            lifeStatus.get(i).setCreatedDate(reportDate);
+            System.out.println("\n\n\n\n\n\n\n\n ADDING PERSON FROM LOOP");
             lifeStatus.get(i).setPerson(this);
         }
     }
@@ -230,12 +241,16 @@ public class Person implements Serializable {
 
     public static Person savePerson(Person p) {
         p.addPersonToLifeStatus();
+        
         EntityManager em = LifeCoachDao.instance.createEntityManager();
         EntityTransaction tx = em.getTransaction();
         tx.begin();
         em.persist(p);
         tx.commit();
         LifeCoachDao.instance.closeConnections(em);
+        System.out.println("\n\n new person created "+p.getIdPerson());
+        
+
         return p;
     } 
 

@@ -47,9 +47,11 @@ public class PersonResource {
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public Person getPerson() {
+
         Person person = this.getPersonById(id);
         if (person == null)
             throw new RuntimeException("Get: Person with " + id + " not found");
+        //System.out.println("\n\n\n\n\n\n\n\n\n\n\n\nHere we are"+person);
         return person;
     }
 
@@ -62,7 +64,7 @@ public class PersonResource {
         if (person == null)
             throw new RuntimeException("Get: Person with " + id + " not found");
         System.out.println("Returning person... " + person.getIdPerson());
-        person.setRecentLifeStatus(true);
+        
         return person;
     }
 
