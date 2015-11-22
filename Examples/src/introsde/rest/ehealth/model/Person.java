@@ -105,7 +105,7 @@ public class Person implements Serializable {
 
 
     public void setLifeStatus (List<LifeStatus> lifeStatus){
-        System.out.println("\n\n\n\n\n\n\n HERE WE ARE");
+        System.out.println("\n\n\n\n\n\n\n LIFE STATUS SETTED");
         this.lifeStatus = lifeStatus;
     }
 
@@ -174,22 +174,29 @@ public class Person implements Serializable {
         
     }
 
-    public void addPersonToLifeStatus(){
+    public static void addPersonToLifeStatus(Person p){
         //System.out.println("\n\n\n\n\n\n\n\n ÄHHhhhhhhhhhhhhhhhh");
-        System.out.println("\n\n\n\n\n\n\n\n ADDING PERSON FROM LOOP" + lifeStatus.size());
-        for(int i=0; i<lifeStatus.size(); i++){
+        
+        try{
+            List<LifeStatus> lifeStatus = p.getLifeStatus();
+            System.out.println("\n\n\n\n\n\n\n\n ADDING PERSON FROM LOOP" + lifeStatus.size());
+            for(int i=0; i< p.lifeStatus.size(); i++){
 
-            DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
-            //System.out.println("\n\n\n\n\n\n\n AQUI BITCH2");
-            Date today = Calendar.getInstance().getTime(); 
-            
-            String reportDate = df.format(today);
-            
-            
-            lifeStatus.get(i).setCreatedDate(reportDate);
-            System.out.println("\n\n\n\n\n\n\n\n ADDING PERSON FROM LOOP");
-            lifeStatus.get(i).setPerson(this);
+                DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
+                
+                Date today = Calendar.getInstance().getTime(); 
+                
+                String reportDate = df.format(today);
+                
+                
+                lifeStatus.get(i).setCreatedDate(reportDate);
+                System.out.println("\n\n\n\n\n\n\n\n ADDING PERSON FROM LOOP");
+                lifeStatus.get(i).setPerson(p);
+            }
+        }catch(Exception e){
+            System.out.println(e);
         }
+        
     }
 
     public static List<LifeStatus> getLifeStatusHistory(int personid, int measureid) {
@@ -240,7 +247,8 @@ public class Person implements Serializable {
     
 
     public static Person savePerson(Person p) {
-        p.addPersonToLifeStatus();
+        Person.addPersonToLifeStatus(p);
+        
         
         EntityManager em = LifeCoachDao.instance.createEntityManager();
         EntityTransaction tx = em.getTransaction();
@@ -248,7 +256,7 @@ public class Person implements Serializable {
         em.persist(p);
         tx.commit();
         LifeCoachDao.instance.closeConnections(em);
-        System.out.println("\n\n new person created "+p.getIdPerson());
+        //System.out.println("\n\n new person created "+p.getIdPerson());
         
 
         return p;
