@@ -1,1 +1,1 @@
-web:    ant install
+web:    ant go-bitch
