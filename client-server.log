@@ -1,0 +1,77 @@
+execute.client:
+     [echo] app start rest.lifestyle.client.ClientApp in build
+     [java] [STEP 1]Service starting connectio with https://secret-bastion-8847.herokuapp.com/sdelab/
+     [java] [STEP 3.1]
+     [java] https://secret-bastion-8847.herokuapp.com/sdelab/person
+     [java] Request #1 GET accept:GET Content type: APPLICATION/XML
+     [java] => Result :OK
+     [java] => HTTP Status:200
+     [java]  More than three persons found
+     [java] Request #2 GET accept:GET Content type: APPLICATION/JSON
+     [java] => Result :Get Person Successfully made with JSON
+     [java] => HTTP Status:200
+     [java]
+     [java] [STEP 3.2]
+     [java] Request #3 GET accept:GET Content type: APPLICATION/XML
+     [java] => Result :OK
+     [java] => HTTP Status:200
+     [java]  First person retrieved from server
+     [java] Request #4 GET accept:GET Content type: APPLICATION/JSON
+     [java] => Result :OK
+     [java] => HTTP Status:200
+     [java]  First person retrieved from server
+     [java] [STEP 3.3]
+     [java] Request #5 PUT accept:PUT Content type: APPLICATION/XML
+     [java] => Result :OK
+     [java] => HTTP Status:201
+     [java]  Name of first person changed successfully
+     [java] Request #6 PUT accept:PUT Content type: APPLICATION/JSON
+     [java] => Result :OK
+     [java] => HTTP Status:201
+     [java]  Name of first person changed successfully
+     [java] [STEP 3.4]
+     [java] Request #7 POST accept:POST Content type: APPLICATION/JSON
+     [java] => Result :OK
+     [java] => HTTP Status:201
+     [java]  new Person Added successfully Id=5629
+     [java] [STEP 3.5]
+     [java] Request #8 DELETE accept:DELETE Content type: APPLICATION/JSON
+     [java] => Result :OK
+     [java] => HTTP Status:204
+     [java]  person deleted successfully Id=5629
+     [java] [STEP 3.6]
+     [java] Request #9 GET accept:GET Content type: APPLICATION/JSON
+     [java] => Result :OK
+     [java] => HTTP Status:204
+     [java]  3 Measurement Types found
+     [java] Request #10 GET accept:GET Content type: APPLICATION/XML
+     [java] => Result :OK
+     [java] => HTTP Status:204
+     [java]  3 Measurement Types found
+     [java] [STEP 3.7]
+     [java] Request #11 GET accept:GET Content type: APPLICATION/XML
+     [java] => Result :OK
+     [java] => HTTP Status:204
+     [java]   Measurement Types found for 1st person = 3, last Person =0
+     [java] Request #12 GET accept:GET Content type: APPLICATION/JSON
+     [java] => Result :OK
+     [java] => HTTP Status:204
+     [java]   Measurement Types found for 1st person = 3, last Person =0
+     [java] [STEP 3.8]
+     [java] Request #13 GET accept:GET Content type: APPLICATION/XML
+     [java] => Result :OK
+     [java] => HTTP Status:204
+     [java]   Measurement weight found for 2
+     [java] Request #14 GET accept:GET Content type: APPLICATION/JSON
+     [java] => Result :OK
+     [java] => HTTP Status:204
+     [java]   Measurement weight found for 2
+     [java] [STEP 3.9]
+     [java] Request #9 GET/POST/GET accept:GET/POST/GET Content type: APPLICATION/XML
+     [java] => Result :ERROR
+     [java] => HTTP Status:204
+     [java]   Measurement weight NOT ADDED to person 2
+     [java] Request #9 GET/POST/GET accept:GET/POST/GET Content type: APPLICATION/JSON
+     [java] => Result :ERROR
+     [java] => HTTP Status:204
+     [java]   Measurement weight NOT ADDED to person 2
