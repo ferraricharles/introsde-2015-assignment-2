@@ -175,7 +175,7 @@ public class Person implements Serializable {
     }
 
     public static void addPersonToLifeStatus(Person p){
-        
+       
         
         try{
             List<LifeStatus> lifeStatus = p.getLifeStatus();
@@ -190,7 +190,7 @@ public class Person implements Serializable {
                 
                 
                 lifeStatus.get(i).setCreatedDate(reportDate);
-               
+                System.out.println("\n\n\n\n\n\n\n\n ADDING PERSON FROM LOOP");
                 lifeStatus.get(i).setPerson(p);
             }
         }catch(Exception e){
