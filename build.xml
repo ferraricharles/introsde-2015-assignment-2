@@ -148,7 +148,7 @@
             </war>
         </target>
 
-        <target name="install" depends="pre-install, init, start">
+        <target name="install" depends="pre-install, start">
             <echo message="Doing everything" />
             
         </target>
