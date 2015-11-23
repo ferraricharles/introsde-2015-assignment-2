@@ -1,1 +1,1 @@
-web:    ant go-bitch
+web:    ant go

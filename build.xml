@@ -147,8 +147,11 @@
                 <classes dir="${build.dir}" />
             </war>
         </target>
-
-        <target name="install" depends="pre-install, start">
+        <target name="install" depends="pre-install">
+            <echo message="Doing everything" />
+            
+        </target>
+        <target name="go" depends="pre-install, start">
             <echo message="Doing everything" />
             
         </target>
