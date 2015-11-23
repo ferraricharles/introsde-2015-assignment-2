@@ -38,5 +38,5 @@ This project was developed by Charles Ferrari and the  client interface is conne
 An instance of the client log is also on the folder, on the root called "client-server.log"
     
 [1]: https://github.com/DamianFox/test2
-[2]: https://warm-earth-3665.herokuapp.com/sdelab
+[2]: http://agile-tundra-4340.herokuapp.com/sdelab
 [3]: https://secret-bastion-8847.herokuapp.com/sdelab
