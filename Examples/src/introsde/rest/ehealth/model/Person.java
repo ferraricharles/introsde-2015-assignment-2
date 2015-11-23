@@ -175,11 +175,11 @@ public class Person implements Serializable {
     }
 
     public static void addPersonToLifeStatus(Person p){
-        //System.out.println("\n\n\n\n\n\n\n\n ÄHHhhhhhhhhhhhhhhhh");
+        
         
         try{
             List<LifeStatus> lifeStatus = p.getLifeStatus();
-            System.out.println("\n\n\n\n\n\n\n\n ADDING PERSON FROM LOOP" + lifeStatus.size());
+            
             for(int i=0; i< p.lifeStatus.size(); i++){
 
                 DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
@@ -190,7 +190,7 @@ public class Person implements Serializable {
                 
                 
                 lifeStatus.get(i).setCreatedDate(reportDate);
-                System.out.println("\n\n\n\n\n\n\n\n ADDING PERSON FROM LOOP");
+               
                 lifeStatus.get(i).setPerson(p);
             }
         }catch(Exception e){
@@ -223,7 +223,7 @@ public class Person implements Serializable {
             System.out.println("Error"+e);
             
         }
-        //System.out.println("\n\n\n\n\n\n PEDAAAAANA Measurements found"+list.size());
+        
         LifeCoachDao.instance.closeConnections(em);
         return list;
         
